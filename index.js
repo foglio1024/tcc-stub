@@ -5,7 +5,7 @@ module.exports = function TccStub(dispatch) {
     var HOST = '127.0.0.50';
     var PORT = 9550;
 
-    net.createServer(function(sock){
+    var srv = net.createServer(function(sock){
         sock.setEncoding('utf8');
         console.log('TCC connected: ' + sock.remoteAddress + ':' + sock.remotePort);
         sock.on('data',function(data){
@@ -13,36 +13,44 @@ module.exports = function TccStub(dispatch) {
             var request = data.toString();
             
             if(request.startsWith('ex_tooltip')){
-                console.log('sending tooltip request: ' + request.toString());
-
-                var itemUid = Number.parseInt(request.substring(request.indexOf('&uid=')+5, request.indexOf('&name=')));
-                var senderName = request.substring(request.indexOf('&name=')+6);
-                
-                console.log('request info: itemUid='+itemUid+' - '+'itemName='+senderName );
-                dispatch.toServer('C_SHOW_ITEM_TOOLTIP_EX',1,{
-                    unk1: 17,
-                    uid: itemUid,
-                    unk2: 0,
-                    unk3: 0,
-                    unk4: 0,
-                    unk5: 0,
-                    unk6: -1,
-                    name: senderName
-                });
-                console.log('request sent')
+                serveExTooltipRequest(request);
             }
 
-            else if(request.startsWith('nondb_tooltip')){
-                console.log('nondb request: ' + request.toString())
+            else if(request.startsWith('nondb_info')){
+                serveNonDbInfoRequest(request);
             }
         });
 
         sock.on('close', function(data){
+            srv.close();
             console.log('TCC disconnected: '+sock.remoteAddress+ ' ' +sock.remotePort);
         });
-    }).listen(PORT, HOST);
+    });
+    srv.listen(PORT, HOST);
     console.log('Listening on '+ HOST +':'+ PORT);
+   
+    function serveExTooltipRequest(message){        //format: ex_tooltip&uid=___&name=___
+        var itemUid = Number.parseInt(message.substring(message.indexOf('&uid=')+5, message.indexOf('&name=')));
+        var senderName = message.substring(message.indexOf('&name=')+6);
+        
+        dispatch.toServer('C_SHOW_ITEM_TOOLTIP_EX',1,{
+            unk1: 17,
+            uid: itemUid,
+            unk2: 0,
+            unk3: 0,
+            unk4: 0,
+            unk5: 0,
+            unk6: -1,
+            name: senderName
+        });
+    }
+    function serveNonDbInfoRequest(message){    //format:  nondb_info&id=___
+        var itemId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
 
-
-    
+        dispatch.toServer('C_REQUEST_NONDB_ITEM_INFO', 1,{
+            item: itemId,
+            unk1: 0,
+            unk2: 0
+        })
+    }
 }
