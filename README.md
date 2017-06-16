@@ -1,3 +1,3 @@
 # tcc-stub
 
-tera-proxy module for TCC interaction.
+tera-proxy module for TCC interaction (still testing)
