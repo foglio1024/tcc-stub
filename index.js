@@ -43,6 +43,7 @@ module.exports = function TccStub(dispatch) {
             unk6: -1,
             name: senderName
         });
+        console.log("ex_tooltip sent");
     }
     function serveNonDbInfoRequest(message){    //format:  nondb_info&id=___
         var itemId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
@@ -52,5 +53,7 @@ module.exports = function TccStub(dispatch) {
             unk1: 0,
             unk2: 0
         })
+        console.log("nondb_info sent");
+        
     }
 }
