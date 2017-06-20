@@ -19,6 +19,9 @@ module.exports = function TccStub(dispatch) {
             else if(request.startsWith('nondb_info')){
                 serveNonDbInfoRequest(request);
             }
+            else if(request.startsWith('ask_int')){
+                servecAskInteractive(request);
+            }
         });
 
         sock.on('close', function(data){
@@ -29,7 +32,7 @@ module.exports = function TccStub(dispatch) {
     srv.listen(PORT, HOST);
     console.log('Listening on '+ HOST +':'+ PORT);
    
-    function serveExTooltipRequest(message){        //format: ex_tooltip&uid=___&name=___
+function serveExTooltipRequest(message){        //format: ex_tooltip&uid=uid&name=name
         var itemUid = Number.parseInt(message.substring(message.indexOf('&uid=')+5, message.indexOf('&name=')));
         var senderName = message.substring(message.indexOf('&name=')+6);
         
@@ -45,15 +48,31 @@ module.exports = function TccStub(dispatch) {
         });
         console.log("ex_tooltip sent");
     }
-    function serveNonDbInfoRequest(message){    //format:  nondb_info&id=___
+    function serveNonDbInfoRequest(message){    //format:  nondb_info&id=id
         var itemId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
 
         dispatch.toServer('C_REQUEST_NONDB_ITEM_INFO', 1,{
             item: itemId,
             unk1: 0,
             unk2: 0
-        })
+        });
         console.log("nondb_info sent");
+    }
+    function servecAskInteractive(message){     //format: ask_int&srvId=srvId&name=name
+        var srvId = Number.parseInt(message.substring(message.indexOf('&srvId=')+7, message.indexOf('&name=')));
+        var targetName = message.substring(message.indexOf('&name=')+6);
+
+        dispatch.toServer('C_ASK_INTERACTIVE', 1,{
+            unk1: 1,
+            unk2: srvId,
+            name: targetName
+        });
         
     }
+    
+    dispatch.hook('sAnswerInteractive', 1 ,(event) => {
+        return false;
+    });
+    
+
 }
