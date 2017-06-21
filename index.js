@@ -15,12 +15,17 @@ module.exports = function TccStub(dispatch) {
             if(request.startsWith('ex_tooltip')){
                 serveExTooltipRequest(request);
             }
-
             else if(request.startsWith('nondb_info')){
                 serveNonDbInfoRequest(request);
             }
             else if(request.startsWith('ask_int')){
                 servecAskInteractive(request);
+            }
+            else if(request.startsWith('inspect')){
+                serveInspect(request);
+            }
+            else if(request.startsWith('inv_party')){
+                servePartyInvite(request);
             }
         });
 
@@ -32,7 +37,7 @@ module.exports = function TccStub(dispatch) {
     srv.listen(PORT, HOST);
     console.log('Listening on '+ HOST +':'+ PORT);
    
-function serveExTooltipRequest(message){        //format: ex_tooltip&uid=uid&name=name
+    function serveExTooltipRequest(message){        //format: ex_tooltip&uid=uid&name=name
         var itemUid = Number.parseInt(message.substring(message.indexOf('&uid=')+5, message.indexOf('&name=')));
         var senderName = message.substring(message.indexOf('&name=')+6);
         
@@ -60,7 +65,7 @@ function serveExTooltipRequest(message){        //format: ex_tooltip&uid=uid&nam
     }
     function servecAskInteractive(message){     //format: ask_int&srvId=srvId&name=name
         var srvId = Number.parseInt(message.substring(message.indexOf('&srvId=')+7, message.indexOf('&name=')));
-        var targetName = message.substring(message.indexOf('&name=')+6);
+        var targetName = message.substring(message.indexOf('&name=') + 6);
 
         dispatch.toServer('C_ASK_INTERACTIVE', 1,{
             unk1: 1,
@@ -69,7 +74,32 @@ function serveExTooltipRequest(message){        //format: ex_tooltip&uid=uid&nam
         });
         
     }
-    
+    function serveInspect(message){     //format: inspect&name=name
+        var targetName = message.substring(message.indexOf('&name=') + 6);
+
+        dispatch.toServer('C_REQUEST_USER_PAPERDOLL_INFO', 1, {
+            name: targetName
+        });
+    }
+    function servePartyInvite(message){     //format: party_inv&name=name&raid=raid
+        console.log(message);
+        var targetName = message.substring(message.indexOf('&name=') + 6, message.indexOf('&raid='));
+
+        var raidByte = Number.parseInt(message.substring(message.indexOf('&raid=') + 6));
+        
+        
+        var dataArray = new Buffer.alloc(1, raidByte);
+
+        dispatch.toServer('C_REQUEST_CONTRACT', 1,{
+            type: 4,
+            unk2: 0,
+            unk3: 0,
+            unk4: 0,
+            name: targetName,
+            data: dataArray
+        });
+    }
+
     dispatch.hook('sAnswerInteractive', 1 ,(event) => {
         return false;
     });
