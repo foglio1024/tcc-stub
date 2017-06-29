@@ -26,6 +26,21 @@ module.exports = function TccStub(dispatch) {
             }
             else if(request.startsWith('inv_party')){
                 servePartyInvite(request);
+            }            
+            else if(request.startsWith('inv_guild')){
+                serveGuildInvite(request);
+            }
+            else if(request.startsWith('friend_req')){
+                serveFriendRequest(request);
+            }
+            else if(request.startsWith('unfriend')){
+                serveUnfriendUser(request);
+            }
+            else if(request.startsWith('block')){
+                serveBlockUser(request);
+            }
+            else if(request.startsWith('unblock')){
+                serveUnblockUser(request);
             }
         });
 
@@ -36,8 +51,9 @@ module.exports = function TccStub(dispatch) {
     });
     srv.listen(PORT, HOST);
     console.log('Listening on '+ HOST +':'+ PORT);
-   
-    function serveExTooltipRequest(message){        //format: ex_tooltip&uid=uid&name=name
+
+   //ex_tooltip&uid=uid&name=name
+    function serveExTooltipRequest(message){        
         var itemUid = Number.parseInt(message.substring(message.indexOf('&uid=')+5, message.indexOf('&name=')));
         var senderName = message.substring(message.indexOf('&name=')+6);
         
@@ -53,7 +69,8 @@ module.exports = function TccStub(dispatch) {
         });
         console.log("ex_tooltip sent");
     }
-    function serveNonDbInfoRequest(message){    //format:  nondb_info&id=id
+    //nondb_info&id=id
+    function serveNonDbInfoRequest(message){    
         var itemId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
 
         dispatch.toServer('C_REQUEST_NONDB_ITEM_INFO', 1,{
@@ -63,7 +80,8 @@ module.exports = function TccStub(dispatch) {
         });
         console.log("nondb_info sent");
     }
-    function servecAskInteractive(message){     //format: ask_int&srvId=srvId&name=name
+    //ask_int&srvId=srvId&name=name
+    function servecAskInteractive(message){     
         var srvId = Number.parseInt(message.substring(message.indexOf('&srvId=')+7, message.indexOf('&name=')));
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
@@ -74,20 +92,18 @@ module.exports = function TccStub(dispatch) {
         });
         
     }
-    function serveInspect(message){     //format: inspect&name=name
+    //inspect&name=name
+    function serveInspect(message){     
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
         dispatch.toServer('C_REQUEST_USER_PAPERDOLL_INFO', 1, {
             name: targetName
         });
     }
-    function servePartyInvite(message){     //format: party_inv&name=name&raid=raid
-        console.log(message);
+    //inv_party&name=name&raid=raid
+    function servePartyInvite(message){     
         var targetName = message.substring(message.indexOf('&name=') + 6, message.indexOf('&raid='));
-
-        var raidByte = Number.parseInt(message.substring(message.indexOf('&raid=') + 6));
-        
-        
+        var raidByte = Number.parseInt(message.substring(message.indexOf('&raid=') + 6));   
         var dataArray = new Buffer.alloc(1, raidByte);
 
         dispatch.toServer('C_REQUEST_CONTRACT', 1,{
@@ -97,6 +113,49 @@ module.exports = function TccStub(dispatch) {
             unk4: 0,
             name: targetName,
             data: dataArray
+        });
+    }
+    //inv_guild&name=name
+    function serveGuildInvite(message){
+        var targetName = message.substring(message.indexOf('&name=') + 6);
+        dispatch.toServer('C_INVITE_USER_TO_GUILD', 1 ,{
+            unk1: 0,
+            unk2: 0,
+            name: targetName,
+        });
+    }
+    //friend_req&name=name&msg=msg
+    function serveFriendRequest(message){
+        var targetName = message.substring(message.indexOf('&name=') + 6, message.indexOf('&msg='));
+        var msg = message.substring(message.indexOf('&msg=')+ 5);
+
+        dispatch.toServer('C_ADD_FRIEND', 1,{
+            name: targetName,
+            message: msg
+        })
+    }
+    //block&name=name
+    function serveBlockUser(message){     
+        var targetName = message.substring(message.indexOf('&name=') + 6);
+
+        dispatch.toServer('C_BLOCK_USER', 1, {
+            name: targetName
+        });
+    }
+    //unblock&name=name
+    function serveUnblockUser(message){     
+        var targetName = message.substring(message.indexOf('&name=') + 6);
+
+        dispatch.toServer('C_REMOVE_BLOCKED_USER', 1, {
+            name: targetName
+        });
+    }
+    //unfriend&name=name
+    function serveUnfriendUser(message){     
+        var targetName = message.substring(message.indexOf('&name=') + 6);
+
+        dispatch.toServer('C_DELETE_FRIEND', 1, {
+            name: targetName
         });
     }
 
