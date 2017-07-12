@@ -1,11 +1,18 @@
 
+var srv = false;
 module.exports = function TccStub(dispatch) {
 
     var net = require('net');
     var HOST = '127.0.0.50';
     var PORT = 9550;
 
-    var srv = net.createServer(function(sock){
+
+    if(srv != false)
+    {
+        srv.close();
+    }
+
+    srv = net.createServer(function(sock){
         sock.setEncoding('utf8');
         console.log('TCC connected: ' + sock.remoteAddress + ':' + sock.remotePort);
         sock.on('data',function(data){
@@ -41,6 +48,18 @@ module.exports = function TccStub(dispatch) {
             }
             else if(request.startsWith('unblock')){
                 serveUnblockUser(request);
+            }            
+            else if(request.startsWith('tb_accept')){
+                serveBrokerAccept(request);
+            }            
+            else if(request.startsWith('tb_decline')){
+                serveBrokerDecline(request);
+            }
+            else if(request.startsWith('lfg_party_req')){
+                servePartyInfoRequest(request);
+            }
+            else if(request.startsWith('apply_decline')){
+                serveApplyDecline(request);
             }
         });
 
@@ -157,6 +176,49 @@ module.exports = function TccStub(dispatch) {
         dispatch.toServer('C_DELETE_FRIEND', 1, {
             name: targetName
         });
+    }
+    //tb_accept&player=playerId&listing=listingId
+    function serveBrokerAccept(message){
+        var playerId = message.substring(message.indexOf('&player=') + 8, message.indexOf('&listing'));
+        var listingId = message.substring(message.indexOf('&listing=') + 9);
+        const data = Buffer.alloc(30);
+        data.writeUInt32LE(playerId, 0);
+        data.writeUInt32LE(listingId, 4);
+
+        dispatch.toServer('C_REQUEST_CONTRACT', 1,{
+            type:35,
+            unk2:0,
+            unk3:0,
+            unk4:0,
+            name:'',
+            data
+        })
+    }
+    //tb_decline&player=playerId&listing=listingId
+    function serveBrokerDecline(message){
+        var pId = message.substring(message.indexOf('&player=') + 8, message.indexOf('&listing'));
+        var listingId = message.substring(message.indexOf('&listing=') + 9);
+
+        dispatch.toServer('C_TRADE_BROKER_REJECT_SUGGEST', 1,{
+            playerId: pId,
+            listing: listingId
+        })
+    }
+    //lfg_party_req&id=lfgId
+    function servePartyInfoRequest(message){
+        var lfgId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
+
+        dispatch.toServer('C_REQUEST_PARTY_INFO', 1, {
+            unk1: lfgId
+        })
+    }
+    //apply_decline&player=playerId
+    function serveApplyDecline(message){
+        var playerId = message.substring(message.indexOf('&player=') + 8);
+
+        dispatch.toServer('C_PARTY_APPLICATION_DENIED', 1,{
+            pid: playerId
+        })
     }
 
     dispatch.hook('sAnswerInteractive', 1 ,(event) => {
