@@ -1,11 +1,12 @@
 
 var srv = false;
+const Command = require('command');
 module.exports = function TccStub(dispatch) {
 
     var net = require('net');
     var HOST = '127.0.0.50';
     var PORT = 9550;
-
+    const command = Command(dispatch);
 
     if(srv != false)
     {
@@ -60,6 +61,9 @@ module.exports = function TccStub(dispatch) {
             }
             else if(request.startsWith('apply_decline')){
                 serveApplyDecline(request);
+            }
+            else if(request.startsWith('chat_link')){
+                serveChatLink(request);
             }
         });
 
@@ -220,10 +224,29 @@ module.exports = function TccStub(dispatch) {
             pid: playerId
         })
     }
-
+    //chat_link&:tcc:TYPE:tcc:DATA:tcc:
+    function serveChatLink(message){
+        
+        var msg = message.substring(message.indexOf('&') + 1);
+        dispatch.toClient('S_CHAT',1,{
+            channel: 18,
+            authorID: 0,
+            unk1: 0,
+            gm: 0,
+            unk2: 0,
+            authorName: 'tccChatLink',
+            message: msg
+        });
+    }
     dispatch.hook('sAnswerInteractive', 1 ,(event) => {
         return false;
     });
-    
+        dispatch.hook('sChat', 1 ,(event) => {
+            if(event.authorName == 'tccChatLink') 
+            {
+                return false;
+            }
+            else{return true;}
+    });
 
 }
