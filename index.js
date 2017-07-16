@@ -65,6 +65,12 @@ module.exports = function TccStub(dispatch) {
             else if(request.startsWith('chat_link')){
                 serveChatLink(request);
             }
+            else if(request.startsWith('power_change')){
+                servePowerChange(request);
+            }
+            else if(request.startsWith('leader')){
+                serveLeaderChange(request);
+            }
         });
 
         sock.on('close', function(data){
@@ -237,6 +243,28 @@ module.exports = function TccStub(dispatch) {
             authorName: 'tccChatLink',
             message: msg
         });
+    }
+    //power_change&sId=id&pId=id&power=p
+    function servePowerChange(message){
+        var sId = Number.parseInt(message.substring(message.indexOf('&sId=') + 5, message.indexOf('&pId=')));
+        var pId = Number.parseInt(message.substring(message.indexOf('&pId=') + 5, message.indexOf('&power=')));
+        var p = Number.parseInt(message.substring(message.indexOf('&power=') + 7));
+
+        dispatch.toServer('C_CHANGE_PARTY_MEMBER_AUTHORITY', 1,{
+            serverId: sId,
+            playerId: pId,
+            canInvite: p
+        })
+    }
+    //leader&sId=id&pId=id
+    function serveLeaderChange(message){
+        var sId = Number.parseInt(message.substring(message.indexOf('&sId=') + 5, message.indexOf('&pId=')));
+        var pId = Number.parseInt(message.substring(message.indexOf('&pId=') + 5));
+
+        dispatch.toServer('C_CHANGE_PARTY_MANAGER',2,{
+            serverId: sId,
+            playerId: pId
+        })
     }
     dispatch.hook('sAnswerInteractive', 1 ,(event) => {
         return false;
