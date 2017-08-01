@@ -1,5 +1,8 @@
 
 var srv = false;
+var tcc;
+var commandChannel = -2 >>>0;
+
 const Command = require('command');
 module.exports = function TccStub(dispatch) {
 
@@ -77,6 +80,8 @@ module.exports = function TccStub(dispatch) {
             srv.close();
             console.log('TCC disconnected: '+sock.remoteAddress+ ' ' +sock.remotePort);
         });
+
+        tcc = sock;
     });
     srv.listen(PORT, HOST);
     console.log('Listening on '+ HOST +':'+ PORT);
@@ -266,15 +271,26 @@ module.exports = function TccStub(dispatch) {
             playerId: pId
         })
     }
+
     dispatch.hook('sAnswerInteractive', 1 ,(event) => {
         return false;
     });
-        dispatch.hook('sChat', 1 ,(event) => {
-            if(event.authorName == 'tccChatLink') 
-            {
-                return false;
-            }
-            else{return true;}
+
+    dispatch.hook('sChat', 1 ,(event) => {
+        if(event.authorName == 'tccChatLink') 
+        {
+            return false;
+        }
+        else{return true;}
+    });
+//{order: 999, filter:{fake:true}}
+    dispatch.hook('sPrivateChat', 1, {order: 999, filter:{fake:true}}, event =>{
+        //send event to TCC
+        if(event.channel == commandChannel && event.message.toString().indexOf(':tccdebug:') == -1) {
+            tcc.write(event.message.toString());
+        }      
+        return true;
+
     });
 
 }
