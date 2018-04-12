@@ -22,7 +22,7 @@ module.exports = function TccStub(dispatch) {
         sock.on('data',function(data){
             //handle request
             var request = data.toString();
-            
+
             if(request.startsWith('ex_tooltip')){
                 serveExTooltipRequest(request);
             }
@@ -37,7 +37,7 @@ module.exports = function TccStub(dispatch) {
             }
             else if(request.startsWith('inv_party')){
                 servePartyInvite(request);
-            }            
+            }
             else if(request.startsWith('inv_guild')){
                 serveGuildInvite(request);
             }
@@ -52,10 +52,10 @@ module.exports = function TccStub(dispatch) {
             }
             else if(request.startsWith('unblock')){
                 serveUnblockUser(request);
-            }            
+            }
             else if(request.startsWith('tb_accept')){
                 serveBrokerAccept(request);
-            }            
+            }
             else if(request.startsWith('tb_decline')){
                 serveBrokerDecline(request);
             }
@@ -87,10 +87,10 @@ module.exports = function TccStub(dispatch) {
     console.log('Listening on '+ HOST +':'+ PORT);
 
    //ex_tooltip&uid=uid&name=name
-    function serveExTooltipRequest(message){        
+    function serveExTooltipRequest(message){
         var itemUid = Number.parseInt(message.substring(message.indexOf('&uid=')+5, message.indexOf('&name=')));
         var senderName = message.substring(message.indexOf('&name=')+6);
-        
+
         dispatch.toServer('C_SHOW_ITEM_TOOLTIP_EX',1,{
             unk1: 17,
             uid: itemUid,
@@ -104,7 +104,7 @@ module.exports = function TccStub(dispatch) {
         console.log("ex_tooltip sent");
     }
     //nondb_info&id=id
-    function serveNonDbInfoRequest(message){    
+    function serveNonDbInfoRequest(message){
         var itemId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
 
         dispatch.toServer('C_REQUEST_NONDB_ITEM_INFO', 1,{
@@ -115,7 +115,7 @@ module.exports = function TccStub(dispatch) {
         console.log("nondb_info sent");
     }
     //ask_int&srvId=srvId&name=name
-    function servecAskInteractive(message){     
+    function servecAskInteractive(message){
         var srvId = Number.parseInt(message.substring(message.indexOf('&srvId=')+7, message.indexOf('&name=')));
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
@@ -124,10 +124,10 @@ module.exports = function TccStub(dispatch) {
             unk2: srvId,
             name: targetName
         });
-        
+
     }
     //inspect&name=name
-    function serveInspect(message){     
+    function serveInspect(message){
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
         dispatch.toServer('C_REQUEST_USER_PAPERDOLL_INFO', 1, {
@@ -135,9 +135,9 @@ module.exports = function TccStub(dispatch) {
         });
     }
     //inv_party&name=name&raid=raid
-    function servePartyInvite(message){     
+    function servePartyInvite(message){
         var targetName = message.substring(message.indexOf('&name=') + 6, message.indexOf('&raid='));
-        var raidByte = Number.parseInt(message.substring(message.indexOf('&raid=') + 6));   
+        var raidByte = Number.parseInt(message.substring(message.indexOf('&raid=') + 6));
         var dataArray = new Buffer.alloc(1, raidByte);
 
         dispatch.toServer('C_REQUEST_CONTRACT', 1,{
@@ -169,7 +169,7 @@ module.exports = function TccStub(dispatch) {
         })
     }
     //block&name=name
-    function serveBlockUser(message){     
+    function serveBlockUser(message){
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
         dispatch.toServer('C_BLOCK_USER', 1, {
@@ -177,7 +177,7 @@ module.exports = function TccStub(dispatch) {
         });
     }
     //unblock&name=name
-    function serveUnblockUser(message){     
+    function serveUnblockUser(message){
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
         dispatch.toServer('C_REMOVE_BLOCKED_USER', 1, {
@@ -185,7 +185,7 @@ module.exports = function TccStub(dispatch) {
         });
     }
     //unfriend&name=name
-    function serveUnfriendUser(message){     
+    function serveUnfriendUser(message){
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
         dispatch.toServer('C_DELETE_FRIEND', 1, {
@@ -237,7 +237,7 @@ module.exports = function TccStub(dispatch) {
     }
     //chat_link&:tcc:TYPE:tcc:DATA:tcc:
     function serveChatLink(message){
-        
+
         var msg = message.substring(message.indexOf('&') + 1);
         dispatch.toClient('S_CHAT',1,{
             channel: 18,
@@ -277,7 +277,7 @@ module.exports = function TccStub(dispatch) {
     });
 
     dispatch.hook('sChat', 1 ,(event) => {
-        if(event.authorName == 'tccChatLink') 
+        if(event.authorName == 'tccChatLink')
         {
             return false;
         }
@@ -288,7 +288,7 @@ module.exports = function TccStub(dispatch) {
         //send event to TCC
         if(event.channel == commandChannel && event.message.toString().indexOf(':tccdebug:') == -1) {
             tcc.write(event.message.toString());
-        }      
+        }
         return true;
 
     });
