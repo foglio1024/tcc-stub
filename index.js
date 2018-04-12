@@ -91,15 +91,15 @@ module.exports = function TccStub(dispatch) {
         var itemUid = Number.parseInt(message.substring(message.indexOf('&uid=')+5, message.indexOf('&name=')));
         var senderName = message.substring(message.indexOf('&name=')+6);
 
-        dispatch.toServer('C_SHOW_ITEM_TOOLTIP_EX',1,{
-            unk1: 17,
-            uid: itemUid,
+        dispatch.toServer('C_SHOW_ITEM_TOOLTIP_EX',2,{
+            type: 17,
+            id: itemUid,
+            unk1: 0,
             unk2: 0,
             unk3: 0,
             unk4: 0,
-            unk5: 0,
-            unk6: -1,
-            name: senderName
+            unk5: -1,
+            owner: senderName
         });
         console.log("ex_tooltip sent");
     }
@@ -107,21 +107,20 @@ module.exports = function TccStub(dispatch) {
     function serveNonDbInfoRequest(message){
         var itemId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
 
-        dispatch.toServer('C_REQUEST_NONDB_ITEM_INFO', 1,{
+        dispatch.toServer('C_REQUEST_NONDB_ITEM_INFO', 2,{
             item: itemId,
             unk1: 0,
-            unk2: 0
+            button: 0
         });
-        console.log("nondb_info sent");
     }
     //ask_int&srvId=srvId&name=name
     function servecAskInteractive(message){
         var srvId = Number.parseInt(message.substring(message.indexOf('&srvId=')+7, message.indexOf('&name=')));
         var targetName = message.substring(message.indexOf('&name=') + 6);
 
-        dispatch.toServer('C_ASK_INTERACTIVE', 1,{
-            unk1: 1,
-            unk2: srvId,
+        dispatch.toServer('C_ASK_INTERACTIVE', 2,{
+            unk: 1,
+            serverId: srvId,
             name: targetName
         });
 
@@ -223,8 +222,8 @@ module.exports = function TccStub(dispatch) {
     function servePartyInfoRequest(message){
         var lfgId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
 
-        dispatch.toServer('C_REQUEST_PARTY_INFO', 1, {
-            unk1: lfgId
+        dispatch.toServer('C_REQUEST_PARTY_INFO', 2, {
+            playerId: lfgId
         })
     }
     //apply_decline&player=playerId
@@ -239,12 +238,12 @@ module.exports = function TccStub(dispatch) {
     function serveChatLink(message){
 
         var msg = message.substring(message.indexOf('&') + 1);
-        dispatch.toClient('S_CHAT',1,{
+        dispatch.toClient('S_CHAT',2,{
             channel: 18,
             authorID: 0,
             unk1: 0,
             gm: 0,
-            unk2: 0,
+            founder: 0,
             authorName: 'tccChatLink',
             message: msg
         });
@@ -272,11 +271,11 @@ module.exports = function TccStub(dispatch) {
         })
     }
 
-    dispatch.hook('sAnswerInteractive', 1 ,(event) => {
+    dispatch.hook('S_ANSWER_INTERACTIVE', 2 ,(event) => {
         return false;
     });
 
-    dispatch.hook('sChat', 1 ,(event) => {
+    dispatch.hook('S_CHAT', 2 ,(event) => {
         if(event.authorName == 'tccChatLink')
         {
             return false;
@@ -284,13 +283,11 @@ module.exports = function TccStub(dispatch) {
         else{return true;}
     });
 //{order: 999, filter:{fake:true}}
-    dispatch.hook('sPrivateChat', 1, {order: 999, filter:{fake:true}}, event =>{
+    dispatch.hook('S_PRIVATE_CHAT', 1, {order: 999, filter:{fake:true}}, event =>{
         //send event to TCC
         if(event.channel == commandChannel && event.message.toString().indexOf(':tccdebug:') == -1) {
             tcc.write(event.message.toString());
         }
         return true;
-
     });
-
 }
