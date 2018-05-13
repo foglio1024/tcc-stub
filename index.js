@@ -2,7 +2,7 @@
 var srv = false;
 var tcc;
 var commandChannel = -2 >>>0;
-
+var useLfg = true;
 const Command = require('command');
 module.exports = function TccStub(dispatch) {
 
@@ -62,17 +62,56 @@ module.exports = function TccStub(dispatch) {
             else if(request.startsWith('lfg_party_req')){
                 servePartyInfoRequest(request);
             }
+            else if(request.startsWith('lfg_page_req')){
+                serveLfgPageRequest(request);
+            }
+            else if(request.startsWith('lfg_apply_req')){
+                serveApplyToLfgRequest(request);
+            }
             else if(request.startsWith('apply_decline')){
                 serveApplyDecline(request);
             }
             else if(request.startsWith('chat_link')){
                 serveChatLink(request);
+            }            
+			else if(request.startsWith('loot_settings')){
+                serveLootSettings(request);
             }
             else if(request.startsWith('power_change')){
                 servePowerChange(request);
             }
             else if(request.startsWith('leader')){
                 serveLeaderChange(request);
+            }
+			else if(request.startsWith('kick')){
+                serveKickMember(request);
+            }			
+            else if(request.startsWith('leave_party')){
+                serveLeavePartyRequest(request);
+            }
+			else if(request.startsWith('lfg_register')){
+                serveRegisterLfg(request);
+            }			
+			else if(request.startsWith('lfg_publicize')){
+                servePublicizeLfg(request);
+            }
+			else if(request.startsWith('lfg_remove')){
+                serveRemoveLfg(request);
+            }
+			else if(request.startsWith('lfg_request_list')){
+                serveRequestLfgList(request);
+            }
+			else if(request.startsWith('disband_group')){
+                serveDisbandRequest(request);
+            }			
+            else if(request.startsWith('reset_instance')){
+                serveResetRequest(request);
+            }            
+            else if(request.startsWith('request_candidates')){
+                serveRequestCandidates(request);
+            }
+			else if(request.startsWith('init_stub')){
+                init(request);
             }
         });
 
@@ -86,7 +125,12 @@ module.exports = function TccStub(dispatch) {
     srv.listen(PORT, HOST);
     console.log('Listening on '+ HOST +':'+ PORT);
 
-   //ex_tooltip&uid=uid&name=name
+	//init_stub&use_lfg=value
+	function init(message){
+		var lfgPar = "&use_lfg=";
+		var useLfg = message.substring(message.indexOf(lfgPar) + lfgPar.length) == "true";
+	}
+    //ex_tooltip&uid=uid&name=name
     function serveExTooltipRequest(message){
         var itemUid = Number.parseInt(message.substring(message.indexOf('&uid=')+5, message.indexOf('&name=')));
         var senderName = message.substring(message.indexOf('&name=')+6);
@@ -123,7 +167,6 @@ module.exports = function TccStub(dispatch) {
             serverId: srvId,
             name: targetName
         });
-
     }
     //inspect&name=name
     function serveInspect(message){
@@ -226,6 +269,13 @@ module.exports = function TccStub(dispatch) {
             playerId: lfgId
         })
     }
+	//lfg_apply_req&id=lfgId
+    function serveApplyToLfgRequest(message){
+        var lfgId = Number.parseInt(message.substring(message.indexOf('&id=') + 4));
+        dispatch.toServer('C_APPLY_PARTY', 1, {
+            playerId: lfgId
+        })
+    }
     //apply_decline&player=playerId
     function serveApplyDecline(message){
         var playerId = message.substring(message.indexOf('&player=') + 8);
@@ -248,6 +298,19 @@ module.exports = function TccStub(dispatch) {
             message: msg
         });
     }
+	//loot_settings
+	function serveLootSettings(message){
+
+        dispatch.toClient('S_CHAT',2,{
+            channel: 18,
+            authorID: 0,
+            unk1: 0,
+            gm: 0,
+            founder: 0,
+            authorName: 'tccChatLink',
+            message: ":tcc-loot:"
+        });
+	}
     //power_change&sId=id&pId=id&power=p
     function servePowerChange(message){
         var sId = Number.parseInt(message.substring(message.indexOf('&sId=') + 5, message.indexOf('&pId=')));
@@ -270,11 +333,102 @@ module.exports = function TccStub(dispatch) {
             playerId: pId
         })
     }
+    //kick&sId=id&pId=id
+    function serveKickMember(message){
+        var sId = Number.parseInt(message.substring(message.indexOf('&sId=') + 5, message.indexOf('&pId=')));
+        var pId = Number.parseInt(message.substring(message.indexOf('&pId=') + 5));
 
+        dispatch.toServer('C_BAN_PARTY_MEMBER',1,{
+            serverId: sId,
+            playerId: pId
+        })
+    }
+	//lfg_page_req&page=page
+	function serveLfgPageRequest(message){
+		var pagePar = "&page=";
+		var p = Number.parseInt(message.substring(message.indexOf(pagePar) + pagePar.length));
+		dispatch.toServer('C_REQUEST_PARTY_MATCH_INFO_PAGE',1,{
+			page: p,
+			unk1: 3,
+			unk2: 0
+		})
+	}
+	//lfg_register&msg=msg&raid=raid
+	function serveRegisterLfg(message){
+		var isRaidPar = "&raid=";
+		var msgPar = "&msg=";
+		var msg = message.substring(message.indexOf(msgPar) + msgPar.length, message.indexOf(isRaidPar));
+		var raid = message.substring(message.indexOf(isRaidPar) + isRaidPar.length) === "true";
+
+		dispatch.toServer('C_REGISTER_PARTY_INFO', 1, {
+			isRaid: raid,
+			message: msg
+		});
+	}	
+	//lfg_remove
+	function serveRemoveLfg(message){
+		dispatch.toServer('C_UNREGISTER_PARTY_INFO', 1, { 
+			unk1: 20,
+			minLevel: 1,
+			maxLevel: 65,
+			unk3: 3,
+			unk4: 0,
+			unk5: 0,
+			unk6: 0
+		});
+	}
+	//lfg_publicize
+	function servePublicizeLfg(message){
+		dispatch.toServer('C_REQUEST_PARTY_MATCH_LINK', 1, { });
+	}
+	//reset_instance
+	function serveResetRequest(message){
+		dispatch.toServer('C_RESET_ALL_DUNGEON', 1, { });
+	}
+	//disband_group
+	function serveDisbandRequest(message){
+		dispatch.toServer('C_DISMISS_PARTY', 1, { });
+	}
+	//leave_party
+	function serveLeavePartyRequest(message){
+		dispatch.toServer('C_LEAVE_PARTY', 1, { });
+	}	
+	//request_candidates
+	function serveRequestCandidates(message){
+		dispatch.toServer('C_REQUEST_CANDIDATE_LIST', 1, { });
+	}
+	//lfg_request_list&minlvl=minlvl&maxlvl=maxlvl
+	function serveRequestLfgList(message){
+		dispatch.toServer("C_PARTY_MATCH_WINDOW_CLOSED", 1, {});
+		var minlvlPar = "&minlvl=";
+		var maxlvlPar = "&maxlvl=";	
+		var min = Number.parseInt(message.substring(message.indexOf(minlvlPar) + minlvlPar.length) , message.indexOf(maxlvlPar));
+		var max = Number.parseInt(message.substring(message.indexOf(maxlvlPar) + maxlvlPar.length));
+		if(min > max) min = max;
+		if(min < 1) min = 1;
+		dispatch.toServer("C_REQUEST_PARTY_MATCH_INFO", 1, {
+			unk1: 0,
+			minlvl: min,
+			maxlvl: max,
+			unk2: 3,
+			unk3: 0,
+			purpose: ""
+		});
+
+	}
+	//block player tooltips
     dispatch.hook('S_ANSWER_INTERACTIVE', 2 ,(event) => {
         return false;
     });
-
+	//block ingame lfg details window if using tcc one
+	dispatch.hook("S_PARTY_MEMBER_INFO", 3, (event) => {
+		return !useLfg;
+	});	
+	//block ingame lfg window if using tcc one
+	dispatch.hook("S_SHOW_PARTY_MATCH_INFO", 1, (event) => {
+		return !useLfg;
+	});
+	//block tcc messages from gpk
     dispatch.hook('S_CHAT', 2 ,(event) => {
         if(event.authorName == 'tccChatLink')
         {
@@ -282,12 +436,16 @@ module.exports = function TccStub(dispatch) {
         }
         else{return true;}
     });
-//{order: 999, filter:{fake:true}}
+	//hook Command messages to display them in tcc {order: 999, filter:{fake:true}}
     dispatch.hook('S_PRIVATE_CHAT', 1, {order: 999, filter:{fake:true}}, event =>{
+		/* Commands:
+		 * - :tcc-chatMode:int  0/1
+		 * - :tcc-uiMode:int    0/1
+		 */
         //send event to TCC
-        if(event.channel == commandChannel && event.message.toString().indexOf(':tccdebug:') == -1) {
-            tcc.write(event.message.toString());
-        }
+        if(event.channel == commandChannel){
+			if(tcc != undefined) tcc.write(event.message.toString());
+        } 
         return true;
     });
 }
