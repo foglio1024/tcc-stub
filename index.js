@@ -18,7 +18,7 @@ module.exports = function TccStub(dispatch) {
 
     srv = net.createServer(function(sock){
         sock.setEncoding('utf8');
-        console.log('TCC connected: ' + sock.remoteAddress + ':' + sock.remotePort);
+        console.log('TCC connected from: ' + sock.remoteAddress + ':' + sock.remotePort);
         sock.on('data',function(data){
             //handle request
             var request = data.toString();
@@ -73,8 +73,8 @@ module.exports = function TccStub(dispatch) {
             }
             else if(request.startsWith('chat_link')){
                 serveChatLink(request);
-            }            
-			else if(request.startsWith('loot_settings')){
+            }
+			     else if(request.startsWith('loot_settings')){
                 serveLootSettings(request);
             }
             else if(request.startsWith('power_change')){
@@ -83,44 +83,51 @@ module.exports = function TccStub(dispatch) {
             else if(request.startsWith('leader')){
                 serveLeaderChange(request);
             }
-			else if(request.startsWith('kick')){
+			     else if(request.startsWith('kick')){
                 serveKickMember(request);
-            }			
+            }
             else if(request.startsWith('leave_party')){
                 serveLeavePartyRequest(request);
             }
-			else if(request.startsWith('lfg_register')){
+			     else if(request.startsWith('lfg_register')){
                 serveRegisterLfg(request);
-            }			
-			else if(request.startsWith('lfg_publicize')){
+            }
+			     else if(request.startsWith('lfg_publicize')){
                 servePublicizeLfg(request);
             }
-			else if(request.startsWith('lfg_remove')){
+			     else if(request.startsWith('lfg_remove')){
                 serveRemoveLfg(request);
             }
-			else if(request.startsWith('lfg_request_list')){
+			     else if(request.startsWith('lfg_request_list')){
                 serveRequestLfgList(request);
             }
-			else if(request.startsWith('disband_group')){
+			     else if(request.startsWith('disband_group')){
                 serveDisbandRequest(request);
-            }			
+            }
             else if(request.startsWith('reset_instance')){
                 serveResetRequest(request);
-            }            
+            }
             else if(request.startsWith('request_candidates')){
                 serveRequestCandidates(request);
             }
-			else if(request.startsWith('init_stub')){
+			     else if(request.startsWith('init_stub')){
                 init(request);
             }
         });
-
         sock.on('close', function(data){
             srv.close();
             console.log('TCC disconnected: '+sock.remoteAddress+ ' ' +sock.remotePort);
         });
 
         tcc = sock;
+    });
+    srv.on('error', (e) => {
+      if(e.code == 'EADDRINUSE'){
+        setTimeout(() => {
+          srv.close();
+          srv.listen(PORT,HOST);
+        }, 1000);
+      }
     });
     srv.listen(PORT, HOST);
     console.log('Listening on '+ HOST +':'+ PORT);
@@ -364,10 +371,10 @@ module.exports = function TccStub(dispatch) {
 			isRaid: raid,
 			message: msg
 		});
-	}	
+	}
 	//lfg_remove
 	function serveRemoveLfg(message){
-		dispatch.toServer('C_UNREGISTER_PARTY_INFO', 1, { 
+		dispatch.toServer('C_UNREGISTER_PARTY_INFO', 1, {
 			unk1: 20,
 			minLevel: 1,
 			maxLevel: 65,
@@ -392,7 +399,7 @@ module.exports = function TccStub(dispatch) {
 	//leave_party
 	function serveLeavePartyRequest(message){
 		dispatch.toServer('C_LEAVE_PARTY', 1, { });
-	}	
+	}
 	//request_candidates
 	function serveRequestCandidates(message){
 		dispatch.toServer('C_REQUEST_CANDIDATE_LIST', 1, { });
@@ -401,7 +408,7 @@ module.exports = function TccStub(dispatch) {
 	function serveRequestLfgList(message){
 		dispatch.toServer("C_PARTY_MATCH_WINDOW_CLOSED", 1, {});
 		var minlvlPar = "&minlvl=";
-		var maxlvlPar = "&maxlvl=";	
+		var maxlvlPar = "&maxlvl=";
 		var min = Number.parseInt(message.substring(message.indexOf(minlvlPar) + minlvlPar.length) , message.indexOf(maxlvlPar));
 		var max = Number.parseInt(message.substring(message.indexOf(maxlvlPar) + maxlvlPar.length));
 		if(min > max) min = max;
@@ -423,7 +430,7 @@ module.exports = function TccStub(dispatch) {
 	//block ingame lfg details window if using tcc one
 	dispatch.hook("S_PARTY_MEMBER_INFO", 3, (event) => {
 		return !useLfg;
-	});	
+	});
 	//block ingame lfg window if using tcc one
 	dispatch.hook("S_SHOW_PARTY_MATCH_INFO", 1, (event) => {
 		return !useLfg;
@@ -445,7 +452,7 @@ module.exports = function TccStub(dispatch) {
         //send event to TCC
         if(event.channel == commandChannel){
 			if(tcc != undefined) tcc.write(event.message.toString());
-        } 
+        }
         return true;
     });
 }
