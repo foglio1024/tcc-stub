@@ -1,4 +1,3 @@
-
 var srv = false;
 var tcc;
 var commandChannel = -2 >>>0;
@@ -18,7 +17,7 @@ module.exports = function TccStub(dispatch) {
 
     srv = net.createServer(function(sock){
         sock.setEncoding('utf8');
-        console.log('TCC connected from: ' + sock.remoteAddress + ':' + sock.remotePort);
+        console.log('[tcc-stub] TCC connected: ' + sock.remoteAddress + ':' + sock.remotePort);
         sock.on('data',function(data){
             //handle request
             var request = data.toString();
@@ -116,7 +115,7 @@ module.exports = function TccStub(dispatch) {
         });
         sock.on('close', function(data){
             srv.close();
-            console.log('TCC disconnected: '+sock.remoteAddress+ ' ' +sock.remotePort);
+            console.log('[tcc-stub] TCC disconnected: '+sock.remoteAddress+ ' ' +sock.remotePort);
         });
 
         tcc = sock;
@@ -130,12 +129,13 @@ module.exports = function TccStub(dispatch) {
       }
     });
     srv.listen(PORT, HOST);
-    console.log('Listening on '+ HOST +':'+ PORT);
+    console.log('[tcc-stub] Listening on '+ HOST +':'+ PORT);
 
 	//init_stub&use_lfg=value
 	function init(message){
 		var lfgPar = "&use_lfg=";
-		var useLfg = message.substring(message.indexOf(lfgPar) + lfgPar.length) == "true";
+		useLfg = message.substring(message.indexOf(lfgPar) + lfgPar.length) == "true";
+		console.log("[tcc-stub] UseLfg set to " + useLfg);
 	}
     //ex_tooltip&uid=uid&name=name
     function serveExTooltipRequest(message){
