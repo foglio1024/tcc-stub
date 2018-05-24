@@ -435,7 +435,7 @@ module.exports = function TccStub(dispatch) {
 	dispatch.hook("S_SHOW_PARTY_MATCH_INFO", 1, (event) => {
 		return !useLfg;
 	});
-	//block tcc messages from gpk
+	//block tcc messages from gpk file
     dispatch.hook('S_CHAT', 2 ,(event) => {
         if(event.authorName == 'tccChatLink')
         {
