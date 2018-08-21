@@ -452,16 +452,16 @@ module.exports = function (tcc_stub) {
         //if(event.channel == commandChannel){
         //console.log("[S_PRIVATE_CHAT] Sending output to TCC")
 
-        if (tcc != undefined) tcc.write('output' + '\t::\t' + event.channel + '\t::\t' + event.author + '\t::\t' + event.message.toString());
-        else console.log("Cannot send data to TCC!");
+        if (tcc != undefined) tcc.write('\v:start:\voutput' + '\t::\t' + event.channel + '\t::\t' + event.author + '\t::\t' + event.message.toString() + '\v:end:\v');
+        else console.log("Cannot send data to TCC! Try restarting proxy.");
 
         //}
         return true;
     });
     tcc_stub.hook('S_JOIN_PRIVATE_CHANNEL', 'raw', { order: 999, filter: { fake: true } }, (code, data, fromServer) => {
         //console.log("[S_JOIN_PRIVATE_CHANNEL] Sending raw packet to TCC")
-        if (tcc != undefined) tcc.write('packet' + '\t::\t' + fromServer + '\t::\t' + data.toString('hex'));
-        else console.log("Cannot send data to TCC!");
+        if (tcc != undefined) tcc.write('\v:start:\vpacket' + '\t::\t' + fromServer + '\t::\t' + data.toString('hex') + '\v:end:\v');
+        else console.log("Cannot send data to TCC! Try restarting proxy.");
         return true;
     });
 
