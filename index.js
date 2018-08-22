@@ -16,7 +16,6 @@ module.exports = function (tcc_stub) {
 
     srv = net.createServer(function (sock) {
         sock.setEncoding('utf8');
-        console.log('[tcc-stub] TCC connected: ' + sock.remoteAddress + ':' + sock.remotePort);
         sock.on('data', function (data) {
             //handle request
             var request = data.toString();
@@ -116,8 +115,6 @@ module.exports = function (tcc_stub) {
             srv.close();
             console.log('[tcc-stub] TCC disconnected: ' + sock.remoteAddress + ' ' + sock.remotePort);
         });
-
-        tcc = sock;
     });
     srv.on('error', (e) => {
         if (e.code == 'EADDRINUSE') {
@@ -127,6 +124,11 @@ module.exports = function (tcc_stub) {
             }, 1000);
         }
     });
+	srv.on('connection', function(sock){
+		console.log('[tcc-stub] TCC connected: ' + sock.remoteAddress + ':' + sock.remotePort);
+		tcc = sock;
+	});
+
     srv.listen(PORT, HOST);
     console.log('[tcc-stub] Listening on ' + HOST + ':' + PORT);
 
@@ -461,7 +463,9 @@ module.exports = function (tcc_stub) {
     tcc_stub.hook('S_JOIN_PRIVATE_CHANNEL', 'raw', { order: 999, filter: { fake: true } }, (code, data, fromServer) => {
         //console.log("[S_JOIN_PRIVATE_CHANNEL] Sending raw packet to TCC")
         if (tcc != undefined) tcc.write('\v:start:\vpacket' + '\t::\t' + fromServer + '\t::\t' + data.toString('hex') + '\v:end:\v');
-        else console.log("Cannot send data to TCC! Try restarting proxy.");
+        else {
+			console.log("Cannot send data to TCC! Restart proxy if the error persists .");
+		}
         return true;
     });
 
