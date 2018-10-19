@@ -123,6 +123,9 @@ module.exports = function (mod) {
 			else if (request.startsWith('command')) {
 	            serveCommand(request);
             }
+			else if (request.startsWith('force_sysmsg')) {
+	            serveForceDeathMsg(request);
+            }
         });
         sock.on('close', function (data) {
             srv.close();
@@ -436,6 +439,15 @@ module.exports = function (mod) {
             purpose: ""
         });
     }
+	//force_sysmsg&msg=msg
+	function serveForceDeathMsg(message) {
+		var msgPar = "&msg="
+		var msg = message.substring(message.indexOf(msgPar) + msgPar.length);
+
+		mod.send("S_SYSTEM_MESSAGE", 1, {
+			message : msg
+		})
+	}
 	//command&cmd=cmd
 	function serveCommand(message) {
 		var cmdPar = "&cmd=";
@@ -488,5 +500,3 @@ module.exports = function (mod) {
 		srv.close();
 	};
 }
-
-
