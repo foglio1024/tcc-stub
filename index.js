@@ -481,7 +481,18 @@ module.exports = function (mod) {
 		 */
         //send event to TCC
         // messageType | event.channel | event.author | event.message 
-        if (tcc != undefined) tcc.write('\v:start:\voutput' + '\t::\t' + event.channel + '\t::\t' + event.author + '\t::\t' + event.message.toString() + '\v:end:\v');
+        if (tcc != undefined) {
+			var author = "";
+	        var msg = event.message.toString();
+	        if (event.author == undefined) {
+		        var authorEnd = event.message.toString().indexOf(']');
+				if (authorEnd != -1) {
+					author = msg.substring(1, authorEnd);
+					msg = msg.substring(authorEnd+2);
+				}
+	        } else author = event.author;
+	        tcc.write('\v:start:\voutput' + '\t::\t' + event.channel + '\t::\t' + author + '\t::\t' + msg+ '\v:end:\v');
+        }
         return true;
     });
     mod.hook('S_JOIN_PRIVATE_CHANNEL', 'raw', { order: 999, filter: { fake: true } }, (code, data, fromServer) => {
