@@ -153,7 +153,7 @@ module.exports = function (mod) {
 		
         console.log(TAG + "TCC " + cyan("LFG window ") + (useLfg ? "enabled" : "disabled") + ". Ingame LFG listings "+ (useLfg ? "will" : "won't") +" be blocked.");
         
-	    setTccVal('IsFpsUtilsAvailable', mod.dispatch.isLoaded('fps-utils'));
+	    setTccVal('IsFpsUtilsAvailable', (mod.manager || mod.dispatch).isLoaded('fps-utils'));
     }
     //ex_tooltip&uid=uid&name=name
     function serveExTooltipRequest(message) {
