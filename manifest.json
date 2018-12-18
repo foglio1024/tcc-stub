@@ -1,7 +1,7 @@
 {
 	"files": {
-		"index.js": "8c45a54390e3279d792a788fddc8ddbb6ef6a8dc305362eb5e130e1a44a180c8",
-		"module.json": "1cdc44b610ee5e5277d0aa3fd6510d449f73217ce0a52e0de18395f69802ec01"
+		"index.js": "84443f1c3ce5f55c05bd810b4f24b00470b0135ac9060dfc8cbd8f8ac2ee58ff",
+		"module.json": "cfb5a8c361c4d5b8dcc5e8c4963e3af41d5ded239cdc742bc8141f9a248a659e"
 	},
 	"defs": {
 		"C_ADD_FRIEND": 1,
