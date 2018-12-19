@@ -1,6 +1,6 @@
 {
 	"files": {
-		"index.js": "84443f1c3ce5f55c05bd810b4f24b00470b0135ac9060dfc8cbd8f8ac2ee58ff",
+		"index.js": "5d0d36f86995488baa514abf1f0ad3d90b02a2f652b6beb8df7c5e4d5afda0c2",
 		"module.json": "cfb5a8c361c4d5b8dcc5e8c4963e3af41d5ded239cdc742bc8141f9a248a659e"
 	},
 	"defs": {
@@ -15,6 +15,7 @@
 		"C_DISMISS_PARTY": 1,
 		"C_INVITE_USER_TO_GUILD": 1,
 		"C_LEAVE_PARTY": 1,
+		"C_LOAD_TOPO_FIN": "raw",
 		"C_PARTY_APPLICATION_DENIED": 1,
 		"C_PARTY_MATCH_WINDOW_CLOSED": 1,
 		"C_REGISTER_PARTY_INFO": 1,
@@ -33,6 +34,7 @@
 		"C_UNREGISTER_PARTY_INFO": 1,
 		"S_ANSWER_INTERACTIVE": 2,
 		"S_CHAT": 2,
+		"S_GET_USER_LIST": "raw",
 		"S_JOIN_PRIVATE_CHANNEL": "raw",
 		"S_PARTY_MEMBER_INFO": 3,
 		"S_PRIVATE_CHAT": 1,
