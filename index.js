@@ -1,7 +1,7 @@
 var srv = false;
 var tcc;
 var commandChannel = -2 >>> 0;
-var useLfg = true;
+var useLfg = false;
 
 function red(txt){
 	return "\x1b[31m"+txt+"\x1b[0m";
@@ -501,7 +501,29 @@ module.exports = function (mod) {
 		
 		return true;
 	});
+	mod.hook('S_GET_USER_LIST', 'raw', event =>{
+		if(tcc == undefined)
+			console.log(TAG + "TCC "+red(" not ")+ "connected. LFG listings won't be blocked.");
 
+		return true;
+	});
+	mod.hook('C_LOAD_TOPO_FIN', 'raw', event => {
+		
+		if(tcc!=undefined){
+			mod.setTimeout(() => {
+				mod.send('S_CHAT', 2, {
+					channel: 18,
+					authorID: 0,
+					unk1: 0,
+					gm: 0,
+					founder: 0,
+					authorName: 'tccChatLink',
+					message: ':tcc-proxyOn:'
+				})
+			}, 2000);
+		}
+		return true;
+	});
 	function setTccVal(name, value) {
 		if (tcc != undefined) tcc.write('\v:start:\vsetval' + '\t::\t' + name + '\t::\t' + value + '\v:end:\v');
 		else console.log(TAG + "Cannot send data to TCC! Restart proxy if the error persists.");
