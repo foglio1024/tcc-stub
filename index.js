@@ -4,13 +4,16 @@ var commandChannel = -2 >>> 0;
 var useLfg = false;
 
 function red(txt){
-	return "\x1b[31m"+txt+"\x1b[0m";
+//	return "\x1b[31m"+txt+"\x1b[0m";
+	return txt;
 }
 function green(txt){
-	return "\x1b[32m"+txt+"\x1b[0m";
+//	return "\x1b[32m"+txt+"\x1b[0m";
+	return txt;
 }
 function cyan(txt){
-	return "\x1b[36m"+txt+"\x1b[0m";
+//	return "\x1b[36m"+txt+"\x1b[0m";
+	return txt;
 }
 	
 const TAG = "["+cyan("tcc-stub") +"] ";
