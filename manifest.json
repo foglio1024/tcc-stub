@@ -1,6 +1,6 @@
 {
 	"files": {
-		"index.js": "08665376128a9d43aa2bd3d522d3c7dea5cac72dd49f553d8069ab3bfd6598f5",
+		"index.js": "d0497869c4b5fc70f966ed08b3b8bac68c90c5db6b1678eb39c48ca83ca6afdf",
 		"module.json": "cfb5a8c361c4d5b8dcc5e8c4963e3af41d5ded239cdc742bc8141f9a248a659e"
 	},
 	"defs": {
@@ -29,6 +29,7 @@
 		"C_REQUEST_PARTY_MATCH_LINK": 1,
 		"C_REQUEST_USER_PAPERDOLL_INFO": 1,
 		"C_RESET_ALL_DUNGEON": 1,
+		"C_RETURN_TO_LOBBY": 1,
 		"C_SHOW_ITEM_TOOLTIP_EX": 2,
 		"C_TRADE_BROKER_REJECT_SUGGEST": 1,
 		"C_UNREGISTER_PARTY_INFO": 1,

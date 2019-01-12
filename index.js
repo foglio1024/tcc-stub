@@ -129,6 +129,9 @@ module.exports = function (mod) {
 			else if (request.startsWith('force_sysmsg')) {
 				serveForceDeathMsg(request);
 			}
+			else if (request.startsWith('return_to_lobby')){
+				serveReturnToLobby();
+			}
 		});
 		sock.on('close', function (data) {
 			srv.close();
@@ -456,6 +459,10 @@ module.exports = function (mod) {
 		var cmdPar = "&cmd=";
 		var cmd = message.substring(message.indexOf(cmdPar) + cmdPar.length);
 		mod.command.exec(cmd);
+	}
+
+	function serveReturnToLobby(){
+		mod.send("C_RETURN_TO_LOBBY", 1, {});
 	}
 	//block player tooltips
 	mod.hook('S_ANSWER_INTERACTIVE', 2, (event) => {
