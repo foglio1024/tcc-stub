@@ -20,6 +20,12 @@ const TAG = "["+cyan("tcc-stub") +"] ";
 
 module.exports = function (mod) {
 
+	if(mod.isClassic)
+	{
+		console.log(TAG + 'TCC does not support classic servers.');
+		return;
+	}
+
 	var net = require('net');
 	var HOST = '127.0.0.50';
 	var PORT = 9550;
