@@ -438,7 +438,7 @@ module.exports = function (mod) {
 		mod.send("C_PARTY_MATCH_WINDOW_CLOSED", 1, {});
 		var minlvlPar = "&minlvl=";
 		var maxlvlPar = "&maxlvl=";
-		var min = Number.parseInt(message.substring(message.indexOf(minlvlPar) + minlvlPar.length), message.indexOf(maxlvlPar));
+		var min = Number.parseInt(message.substring(message.indexOf(minlvlPar) + minlvlPar.length, message.indexOf(maxlvlPar)));
 		var max = Number.parseInt(message.substring(message.indexOf(maxlvlPar) + maxlvlPar.length));
 		if (min > max) min = max;
 		if (min < 1) min = 1;
