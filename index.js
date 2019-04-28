@@ -4,20 +4,25 @@ class TccStub
 {
     constructor(mod)
     {
+        this.mod = mod;
+        this.useLfg = false;
         if (mod.isClassic)
         {
             console.log('TCC does not support classic servers.');
             return;
         }
-        this.useLfg = false;
-
-        this.mod = mod;
-
-        this.tcc = new TccInterface();
-        this.server = new RpcServer(this);
-
-        this.server.start();
-        this.installHooks();
+        try
+        {
+            this.tcc = new TccInterface();
+            this.server = new RpcServer(this);
+            this.server.start();
+            this.installHooks();
+        } 
+        catch (error)
+        {
+            console.log(`Error while setting up tcc-stub: ${error}\nThis might be caused by multi-clienting. Stop botting :kappa:.`);
+            return;
+        }
     }
 
     installHooks()
