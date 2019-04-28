@@ -11,18 +11,10 @@ class TccStub
             console.log('TCC does not support classic servers.');
             return;
         }
-        try
-        {
-            this.tcc = new TccInterface();
-            this.server = new RpcServer(this);
-            this.server.start();
-            this.installHooks();
-        } 
-        catch (error)
-        {
-            console.log(`Error while setting up tcc-stub: ${error}\nThis might be caused by multi-clienting. Stop botting :kappa:.`);
-            return;
-        }
+        this.tcc = new TccInterface();
+        this.server = new RpcServer(this);
+        this.server.start();
+        this.installHooks();
     }
 
     installHooks()
