@@ -2,7 +2,7 @@
 	"files": {
 		"index.js": "5e5d24986cc052bcebb54c83bd0f5499ae5ff3affde645023ec0badccedce308",
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
-		"lib/rpc-handler.js": "d6feaa8baa4251b72c414c458d341753b31153a00cd8466f4d59972c9d07e1b5",
+		"lib/rpc-handler.js": "0517a81ab70f4df477ed45b2f52fed0ad06d804830d2ac8a221b3ff33f6753ed",
 		"lib/rpc-server.js": "07c83ed64a46b2f8b6edba33673eee32cce42b2a2fbde85071dd1c985e0356b3",
 		"lib/tcc-interface.js": "44411be175f9a8b0122773465e62324b065650e52ec111a1ab606cd4086af372",
 		"module.json": "cfb5a8c361c4d5b8dcc5e8c4963e3af41d5ded239cdc742bc8141f9a248a659e"
