@@ -26,7 +26,7 @@ class TccStub
         // block ingame lfg details
         this.mod.hook("S_PARTY_MEMBER_INFO", 3, () => { return !this.useLfg; });
         // block tcc messages from gpk file
-        this.mod.hook('S_CHAT', 2, (p) => { return p.authorName != 'tccChatLink'; });
+        this.mod.hook('S_CHAT', 3, (p) => { return p.authorName != 'tccChatLink'; });
         // hook Command messages to display them in tcc {order: 999, filter:{fake:true}}
         this.mod.hook('S_PRIVATE_CHAT', 1, { order: 999, filter: { fake: true } }, p =>
         {
@@ -86,12 +86,8 @@ class TccStub
         {
             this.mod.setTimeout(() =>
             {
-                this.mod.send('S_CHAT', 2, {
+                this.mod.send('S_CHAT', 3, {
                     channel: 18,
-                    authorID: 0,
-                    unk1: 0,
-                    gm: 0,
-                    founder: 0,
                     authorName: 'tccChatLink',
                     message: ':tcc-proxyOn:'
                 })
