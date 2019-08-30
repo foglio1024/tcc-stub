@@ -88,7 +88,7 @@ class TccStub
             {
                 this.mod.send('S_CHAT', 3, {
                     channel: 18,
-                    authorName: 'tccChatLink',
+                    name: 'tccChatLink',
                     message: ':tcc-proxyOn:'
                 })
             }, 2000);
