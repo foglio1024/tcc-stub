@@ -8,7 +8,7 @@ class TccStub
         this.useLfg = false;
         if (mod.isClassic)
         {
-            console.log('TCC does not support classic servers.');
+            mod.log('TCC does not support classic servers.');
             return;
         }
         this.tcc = new TccInterface();
