@@ -4,7 +4,7 @@
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
 		"lib/rpc-handler.js": "4720baa91dab59635979ccce87999334d8298afa48988b4408796d88c5f8b099",
 		"lib/rpc-server.js": "2bb28b45fad31b94106336df60af723b753a4acd6a1ab4526f91fb7ee021311d",
-		"lib/tcc-interface.js": "a3005b5d2ea1ad2563d48a7585469e170c5c6c06462f26db129d63814952361a",
+		"lib/tcc-interface.js": "d0941f73e308c9e95464bc11c9600ec331a5298e4674d8cc8e7572ed2429d2af",
 		"module.json": "cfb5a8c361c4d5b8dcc5e8c4963e3af41d5ded239cdc742bc8141f9a248a659e"
 	},
 	"defs": {
