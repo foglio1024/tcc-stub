@@ -11,7 +11,7 @@ class TccStub
             mod.log('TCC does not support classic servers.');
             return;
         }
-        this.tcc = new TccInterface();
+        this.tcc = new TccInterface(mod);
         this.server = new RpcServer(this);
         this.server.start();
         this.installHooks();
