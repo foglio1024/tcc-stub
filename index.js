@@ -1,5 +1,7 @@
 const { TccInterface } = require("./lib/tcc-interface");
 const { RpcServer } = require("./lib/rpc-server");
+// const BadGui = require('../badGui');
+
 class TccStub
 {
     constructor(mod)
@@ -15,6 +17,15 @@ class TccStub
         this.server = new RpcServer(this);
         this.server.start();
         this.installHooks();
+        
+        // soon (TM)
+        //this.gui = new BadGui(mod);
+        //this.mod.command.add('tcc-toggle-gpk', (guiName, bMode) => {
+        //    this.gui.parse([{
+        //        gpk: `OnGameEventShowUI,${guiName},${bMode}`
+        //    }],"HideCharWindow");
+        //});
+    
     }
 
     installHooks()
