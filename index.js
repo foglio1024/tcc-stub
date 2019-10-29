@@ -8,6 +8,7 @@ class TccStub
     {
         this.mod = mod;
         this.useLfg = false;
+        this.EnablePlayerMenu = false;
         if (mod.isClassic)
         {
             mod.log('TCC does not support classic servers.');
@@ -17,7 +18,7 @@ class TccStub
         this.server = new RpcServer(this);
         this.server.start();
         this.installHooks();
-        
+
         // soon (TM)
         //this.gui = new BadGui(mod);
         //this.mod.command.add('tcc-toggle-gpk', (guiName, bMode) => {
@@ -25,13 +26,13 @@ class TccStub
         //        gpk: `OnGameEventShowUI,${guiName},${bMode}`
         //    }],"HideCharWindow");
         //});
-    
+
     }
 
     installHooks()
     {
         // block ingame player menu
-        this.mod.hook('S_ANSWER_INTERACTIVE', 2, () => { return false; });
+        this.mod.hook('S_ANSWER_INTERACTIVE', 2, () => { return !this.EnablePlayerMenu; });
         // block ingame lfg list
         this.mod.hook("S_SHOW_PARTY_MATCH_INFO", 1, () => { return !this.useLfg; });
         // block ingame lfg details
