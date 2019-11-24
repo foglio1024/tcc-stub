@@ -1,6 +1,6 @@
 {
 	"files": {
-		"index.js": "7e51e455d1a79a7a2d93909ba8cdcabe2a25e6613515daa045b82fcf03d70500",
+		"index.js": "4d61bcdd3f70ea5d8af8bc7e533ede3b6f644178bd2d1f5b5a7befa32e0ab6f9",
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
 		"lib/rpc-handler.js": "da44a28a57ff67ffd0c512a6264e4d04703298a9babc491af3d8ce7bf54f5ed6",
 		"lib/rpc-server.js": "fc2c5df21b271601c3d5a81e07c67d433a90023fcd4d1da70187aa20d5d95d2b",
@@ -43,6 +43,7 @@
 		"S_PARTY_MEMBER_INFO": 3,
 		"S_PRIVATE_CHAT": 1,
 		"S_SHOW_PARTY_MATCH_INFO": 1,
-		"S_SYSTEM_MESSAGE": 1
+		"S_SYSTEM_MESSAGE": 1,
+		"S_USER_EFFECT": 1
 	}
 }

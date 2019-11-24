@@ -27,6 +27,21 @@ class TccStub
         //    }],"HideCharWindow");
         //});
 
+        //memes
+        this.mod.hook('S_SYSTEM_MESSAGE', 1, ev =>
+        {
+            if (mod.game.me.inDungeon === true || mod.game.me.inBattleground === true) return;
+            if (ev.message.indexOf("Foglio") === -1 &&
+                ev.message.indexOf("Folyemi")=== -1) return;
+
+            const sm = mod.parseSystemMessage(ev.message);
+            if (sm.id === 'SMT_FRIEND_SEND_HELLO' 
+             || sm.id === 'SMT_FRIEND_RECEIVE_HELLO')
+            {
+                this.memeA();
+            }
+
+        });
     }
 
     installHooks()
@@ -106,6 +121,24 @@ class TccStub
             }, 2000);
             return true;
         });
+    }
+
+    memeA(){
+        this.mod.send('S_USER_EFFECT', 1, {
+            target: this.mod.game.me.gameId,
+            source: 0,
+            circle: 2,
+            operation: 1
+        });
+        this.mod.setInterval(() =>
+        {
+            this.mod.send('S_USER_EFFECT', 1, {
+                target: this.mod.game.me.gameId,
+                source: 0,
+                circle: 2,
+                operation: 2
+            });
+        }, 10000);
     }
 
     destructor()
