@@ -16,6 +16,7 @@ class TccStub
         }
         this.tcc = new TccInterface(mod);
         this.server = new RpcServer(this);
+        this.debug('Starting rpc server');
         this.server.start();
         this.installHooks();
 
@@ -32,16 +33,22 @@ class TccStub
         {
             if (mod.game.me.inDungeon === true || mod.game.me.inBattleground === true) return;
             if (ev.message.indexOf("Foglio") === -1 &&
-                ev.message.indexOf("Folyemi")=== -1) return;
+                ev.message.indexOf("Folyemi") === -1) return;
 
             const sm = mod.parseSystemMessage(ev.message);
-            if (sm.id === 'SMT_FRIEND_SEND_HELLO' 
-             || sm.id === 'SMT_FRIEND_RECEIVE_HELLO')
+            if (sm.id === 'SMT_FRIEND_SEND_HELLO'
+                || sm.id === 'SMT_FRIEND_RECEIVE_HELLO')
             {
                 this.memeA();
             }
 
         });
+
+        this.mod.command.add('tcc', (arg) => {
+            if(arg !== 'debug') return;
+            mod.settings.debug = !mod.settings.debug;
+            mod.command.message(`<font color="#cccccc">Debug mode </font><font color="#${(mod.settings.debug ? '42F5AD' : 'F05164')}">${(mod.settings.debug ? 'en' : 'dis')}abled</font>`);
+        })
     }
 
     installHooks()
@@ -123,7 +130,8 @@ class TccStub
         });
     }
 
-    memeA(){
+    memeA()
+    {
         this.mod.send('S_USER_EFFECT', 1, {
             target: this.mod.game.me.gameId,
             source: 0,
@@ -141,8 +149,15 @@ class TccStub
         }, 10000);
     }
 
+    debug(msg)
+    {
+        if(!this.mod.settings.debug) return;
+        this.mod.command.message(`<font color="#fff1b5">${msg}</font>`);
+    }
+    
     destructor()
     {
+        this.debug('Stopping rpc server');
         this.server.stop();
     }
 }

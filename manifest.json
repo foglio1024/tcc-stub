@@ -1,11 +1,12 @@
 {
 	"files": {
-		"index.js": "4d61bcdd3f70ea5d8af8bc7e533ede3b6f644178bd2d1f5b5a7befa32e0ab6f9",
+		"index.js": "cf81f4111d22e4091a1a0e13736d6aedb96a2f1a24ee113b894e8472756f92c6",
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
-		"lib/rpc-handler.js": "ac13265d15a5f60a4ba1420b68d1f934f583cc214029a69ff3065d06036a7524",
+		"lib/rpc-handler.js": "38a551696bc59f276c604ac9ad005d6552e63d40463c37b51096bfe0d72d64a8",
 		"lib/rpc-server.js": "fc2c5df21b271601c3d5a81e07c67d433a90023fcd4d1da70187aa20d5d95d2b",
 		"lib/tcc-interface.js": "d0941f73e308c9e95464bc11c9600ec331a5298e4674d8cc8e7572ed2429d2af",
-		"module.json": "cfb5a8c361c4d5b8dcc5e8c4963e3af41d5ded239cdc742bc8141f9a248a659e"
+		"module.json": "a6a0671410327ef1eac9acf868fdf6cde3b790a8f0b5a3c07c0faba47e6bbaa5",
+		"settings-migrator.js": "6d45c47418ddf7975ca1991b7b544fc95d3f1bf1781cd0bf71299e9d103c5f06"
 	},
 	"defs": {
 		"C_ADD_FRIEND": 1,
