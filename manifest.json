@@ -1,8 +1,8 @@
 {
 	"files": {
-		"index.js": "cf81f4111d22e4091a1a0e13736d6aedb96a2f1a24ee113b894e8472756f92c6",
+		"index.js": "e20eaa15fe940220b3b836526558f50ae71fd3a5fefc8e691a2861ce26a54c2f",
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
-		"lib/rpc-handler.js": "38a551696bc59f276c604ac9ad005d6552e63d40463c37b51096bfe0d72d64a8",
+		"lib/rpc-handler.js": "0bed82c8079c598897c7a07c0820ea207a60524dfad4c3ec53aa4faf9b354156",
 		"lib/rpc-server.js": "fc2c5df21b271601c3d5a81e07c67d433a90023fcd4d1da70187aa20d5d95d2b",
 		"lib/tcc-interface.js": "d0941f73e308c9e95464bc11c9600ec331a5298e4674d8cc8e7572ed2429d2af",
 		"module.json": "a6a0671410327ef1eac9acf868fdf6cde3b790a8f0b5a3c07c0faba47e6bbaa5",

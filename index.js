@@ -9,6 +9,7 @@ class TccStub
         this.mod = mod;
         this.useLfg = false;
         this.EnablePlayerMenu = false;
+        this.ChatEnabled = false;
         if (mod.isClassic)
         {
             mod.log('TCC does not support classic servers.');
@@ -44,8 +45,9 @@ class TccStub
 
         });
 
-        this.mod.command.add('tcc', (arg) => {
-            if(arg !== 'debug') return;
+        this.mod.command.add('tcc', (arg) =>
+        {
+            if (arg !== 'debug') return;
             mod.settings.debug = !mod.settings.debug;
             mod.command.message(`<font color="#cccccc">Debug mode </font><font color="#${(mod.settings.debug ? '42F5AD' : 'F05164')}">${(mod.settings.debug ? 'en' : 'dis')}abled</font>`);
         })
@@ -118,6 +120,7 @@ class TccStub
         // notify to Chat2 that proxy is active
         this.mod.hook('C_LOAD_TOPO_FIN', 'raw', () =>
         {
+            if (!this.ChatEnabled) return true;
             this.mod.setTimeout(() =>
             {
                 this.mod.send('S_CHAT', 3, {
@@ -151,10 +154,10 @@ class TccStub
 
     debug(msg)
     {
-        if(!this.mod.settings.debug) return;
+        if (!this.mod.settings.debug) return;
         this.mod.command.message(`<font color="#fff1b5">${msg}</font>`);
     }
-    
+
     destructor()
     {
         this.debug('Stopping rpc server');
