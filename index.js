@@ -55,13 +55,13 @@ class TccStub
         this.mod.command.add(':tcc-chatmode', (arg) =>
         {
             this.debug("Setting ChatMode to " + arg);
-            this.tcc.call('setChatMode', { 'chatMode': arg == true });
+            this.tcc.call('setChatMode', { 'chatMode': arg == "true" });
         });
         
         this.mod.command.add(':tcc-uimode', (arg) =>
         {
             this.debug("Setting UiMode to " + arg);
-            this.tcc.call('setUiMode', { 'uiMode': arg == true });
+            this.tcc.call('setUiMode', { 'uiMode': arg == "true" });
         });
     }
 
