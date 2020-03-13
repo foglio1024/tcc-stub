@@ -50,7 +50,19 @@ class TccStub
             if (arg !== 'debug') return;
             mod.settings.debug = !mod.settings.debug;
             mod.command.message(`<font color="#cccccc">Debug mode </font><font color="#${(mod.settings.debug ? '42F5AD' : 'F05164')}">${(mod.settings.debug ? 'en' : 'dis')}abled</font>`);
-        })
+        });
+
+        this.mod.command.add(':tcc-chatmode', (arg) =>
+        {
+            this.debug("Setting ChatMode to " + arg);
+            this.tcc.call('setChatMode', { 'chatMode': arg == true });
+        });
+        
+        this.mod.command.add(':tcc-uimode', (arg) =>
+        {
+            this.debug("Setting UiMode to " + arg);
+            this.tcc.call('setUiMode', { 'uiMode': arg == true });
+        });
     }
 
     installHooks()
