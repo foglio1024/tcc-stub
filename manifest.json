@@ -1,11 +1,11 @@
 {
 	"files": {
-		"index.js": "7ebf1253ac31ce79804492313d942130dac36e99222525210868717015bd9802",
+		"index.js": "a004a0586d8dd7a9f79016a23c45bfeadd094b1eff98ad7f95e1270e651a3cb1",
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
-		"lib/rpc-handler.js": "c1836da11b767fa89084a59582ad703bf628d58ad8d4d925026f83c3d456c57b",
+		"lib/rpc-handler.js": "f223de17f0b33045991c01ef12b7e68e338a1bbae97fadec7aa0a7bf39e79121",
 		"lib/rpc-server.js": "fc2c5df21b271601c3d5a81e07c67d433a90023fcd4d1da70187aa20d5d95d2b",
 		"lib/tcc-interface.js": "d0941f73e308c9e95464bc11c9600ec331a5298e4674d8cc8e7572ed2429d2af",
-		"module.json": "a6a0671410327ef1eac9acf868fdf6cde3b790a8f0b5a3c07c0faba47e6bbaa5",
+		"module.json": "f5165900c5cff19c3d1d4f1b7de4adb267ea4642aec433ea894c24e8cf55ef56",
 		"settings-migrator.js": "6d45c47418ddf7975ca1991b7b544fc95d3f1bf1781cd0bf71299e9d103c5f06"
 	},
 	"defs": {
@@ -42,6 +42,7 @@
 		"S_ANSWER_INTERACTIVE": 2,
 		"S_CHAT": 3,
 		"S_JOIN_PRIVATE_CHANNEL": "raw",
+		"S_LOGIN": "raw",
 		"S_PARTY_MEMBER_INFO": 3,
 		"S_PRIVATE_CHAT": 1,
 		"S_SHOW_PARTY_MATCH_INFO": 1,

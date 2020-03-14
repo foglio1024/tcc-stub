@@ -9,7 +9,8 @@ class TccStub
         this.mod = mod;
         this.useLfg = false;
         this.EnablePlayerMenu = false;
-        this.ChatEnabled = false;
+        this.EnableProxy = false;
+        this.ShowIngameChat = true;
         if (mod.isClassic)
         {
             mod.log('TCC does not support classic servers.');
@@ -57,12 +58,26 @@ class TccStub
             this.debug("Setting ChatMode to " + arg);
             this.tcc.call('setChatMode', { 'chatMode': arg == 'true' });
         });
-        
+
         this.mod.command.add(':tcc-uimode', (arg) =>
         {
             this.debug("Setting UiMode to " + arg);
             this.tcc.call('setUiMode', { 'uiMode': arg == 'true' });
         });
+
+        this.mod.command.add(':tcc-proxyOn:', (arg) => { });
+        this.mod.command.add(':tcc-chatOn:', (arg) => { });
+        this.mod.command.add(':tcc-chatOff:', (arg) => { });
+
+    }
+
+    notifyShowIngameChatChanged()
+    {
+        this.mod.send('S_CHAT', 3, {
+            channel: 18,
+            name: 'tccChatLink',
+            message: this.ShowIngameChat ? ':tcc-chatOn:' : ':tcc-chatOff:'
+        })
     }
 
     installHooks()
@@ -132,17 +147,23 @@ class TccStub
         // notify to Chat2 that proxy is active
         this.mod.hook('C_LOAD_TOPO_FIN', 'raw', () =>
         {
-            if (!this.ChatEnabled) return true;
+            if (!this.EnableProxy) return true;
             this.mod.setTimeout(() =>
             {
                 this.mod.send('S_CHAT', 3, {
                     channel: 18,
                     name: 'tccChatLink',
                     message: ':tcc-proxyOn:'
-                })
+                });
+                this.notifyShowIngameChatChanged();
             }, 2000);
             return true;
         });
+        this.mod.hook("S_LOGIN", 'raw', () =>
+        {
+            // doing it upon connection causes the client to not enter the server
+            this.notifyShowIngameChatChanged();
+        })
     }
 
     memeA()
