@@ -1,5 +1,8 @@
 const { TccInterface } = require("./lib/tcc-interface");
 const { RpcServer } = require("./lib/rpc-server");
+const path = require('path');
+const fs = require('fs');
+
 // const BadGui = require('../badGui');
 
 class TccStub
@@ -73,7 +76,11 @@ class TccStub
 
     notifyShowIngameChatChanged()
     {
-        if (!this.mod.manager.isLoaded("tcc-chat-link")) return;
+        if (!this.isChatLinkAvailable())
+        {
+            this.debug("tcc-chat-link not found.");
+            return;
+        }
 
         this.mod.send('S_CHAT', 3, {
             channel: 18,
@@ -150,7 +157,11 @@ class TccStub
         this.mod.hook('C_LOAD_TOPO_FIN', 'raw', () =>
         {
             if (!this.EnableProxy) return true;
-            if (!this.mod.manager.isLoaded("tcc-chat-link")) return;
+            if (!this.isChatLinkAvailable())
+            {
+                this.debug("tcc-chat-link not found.");
+                return true;
+            }
 
             this.mod.setTimeout(() =>
             {
@@ -168,6 +179,15 @@ class TccStub
             // doing it upon connection causes the client to not enter the server
             this.notifyShowIngameChatChanged();
         })
+    }
+
+    isChatLinkAvailable()
+    {
+        const p = path.join(__dirname, '..', 'tcc-chat-link');
+        this.debug(`Path is :${p}`);
+        return this.mod.manager.isLoaded("tcc-chat-link")
+            ||
+            fs.existsSync(p); // workaround
     }
 
     memeA()
