@@ -183,11 +183,13 @@ class TccStub
 
     isChatLinkAvailable()
     {
-        const p = path.join(__dirname, '..', 'tcc-chat-link');
-        this.debug(`Path is :${p}`);
-        return this.mod.manager.isLoaded("tcc-chat-link")
-            ||
-            fs.existsSync(p); // workaround
+        // const p = path.join(__dirname, '..', 'tcc-chat-link');
+        // this.debug(`Path is :${p}`);
+        // return this.mod.manager.isLoaded("tcc-chat-link")
+        //     ||
+        //     fs.existsSync(p); // workaround
+
+        return this.mod.clientInterface.moduleManager.isInstalled('tcc-chat-link');
     }
 
     memeA()
