@@ -73,7 +73,7 @@ class TccStub
 
     notifyShowIngameChatChanged()
     {
-        if (!this.mod.isLoaded("tcc-chat-link")) return;
+        if (!this.mod.manager.isLoaded("tcc-chat-link")) return;
 
         this.mod.send('S_CHAT', 3, {
             channel: 18,
@@ -150,7 +150,7 @@ class TccStub
         this.mod.hook('C_LOAD_TOPO_FIN', 'raw', () =>
         {
             if (!this.EnableProxy) return true;
-            if (!this.mod.isLoaded("tcc-chat-link")) return;
+            if (!this.mod.manager.isLoaded("tcc-chat-link")) return;
 
             this.mod.setTimeout(() =>
             {
