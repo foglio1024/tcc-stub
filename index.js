@@ -73,6 +73,8 @@ class TccStub
 
     notifyShowIngameChatChanged()
     {
+        if (!this.mod.isLoaded("tcc-chat-link")) return;
+
         this.mod.send('S_CHAT', 3, {
             channel: 18,
             name: 'tccChatLink',
@@ -148,6 +150,8 @@ class TccStub
         this.mod.hook('C_LOAD_TOPO_FIN', 'raw', () =>
         {
             if (!this.EnableProxy) return true;
+            if (!this.mod.isLoaded("tcc-chat-link")) return;
+
             this.mod.setTimeout(() =>
             {
                 this.mod.send('S_CHAT', 3, {
@@ -174,7 +178,7 @@ class TccStub
             circle: 2,
             operation: 1
         });
-        this.mod.setInterval(() =>
+        this.mod.setTimeout(() =>
         {
             this.mod.send('S_USER_EFFECT', 1, {
                 target: this.mod.game.me.gameId,

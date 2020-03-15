@@ -1,6 +1,6 @@
 {
 	"files": {
-		"index.js": "a004a0586d8dd7a9f79016a23c45bfeadd094b1eff98ad7f95e1270e651a3cb1",
+		"index.js": "b32c61914af8ecc88c85e2f936c9830bebc8f683e81f7948e9683ce07ee8be43",
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
 		"lib/rpc-handler.js": "f223de17f0b33045991c01ef12b7e68e338a1bbae97fadec7aa0a7bf39e79121",
 		"lib/rpc-server.js": "fc2c5df21b271601c3d5a81e07c67d433a90023fcd4d1da70187aa20d5d95d2b",
