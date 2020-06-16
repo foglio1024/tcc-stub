@@ -189,7 +189,7 @@ class TccStub
         //     ||
         //     fs.existsSync(p); // workaround
 
-        return this.mod.clientInterface.moduleManager.isInstalled('tcc-chat-link');
+        return this.mod.manager.isInstalled('tcc-chat-link');
     }
 
     memeA()
