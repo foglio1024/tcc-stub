@@ -187,7 +187,7 @@ class TccStub
         // this.debug(`Path is :${p}`);
         // return this.mod.manager.isLoaded("tcc-chat-link")
         //     ||
-        //     fs.existsSync(p); // workaround
+        //     fs.existsSync(p); // workaround 
 
         return this.mod.manager.isInstalled('tcc-chat-link');
     }
