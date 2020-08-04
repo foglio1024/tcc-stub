@@ -14,11 +14,7 @@ class TccStub
         this.EnablePlayerMenu = false;
         this.EnableProxy = false;
         this.ShowIngameChat = true;
-        if (mod.isClassic)
-        {
-            mod.log('TCC does not support classic servers.');
-            return;
-        }
+
         this.tcc = new TccInterface(mod);
         this.server = new RpcServer(this);
         this.debug('Starting rpc server');
@@ -189,7 +185,7 @@ class TccStub
         //     ||
         //     fs.existsSync(p); // workaround 
 
-        return this.mod.manager.isInstalled('tcc-chat-link');
+        return this.mod.manager.isInstalled('tcc-chat-link') && this.mod.clientInterface.info.arch !== 'x64';
     }
 
     memeA()
