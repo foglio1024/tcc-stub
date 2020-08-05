@@ -6,7 +6,7 @@
 	"description": "Proxy interface which allows TCC to actively interact with game.",
 	"disableAutoUpdate": false,
 	"options": {
-		"niceName": "tcc-stub",
+		"cliName": "tcc-stub",
 		"guiName": "TCC stub",
 		"settingsFile": "config.json",
 		"settingsMigrator": "settings-migrator.js",
