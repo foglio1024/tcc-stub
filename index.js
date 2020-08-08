@@ -88,11 +88,12 @@ class TccStub
     installHooks()
     {
         // block ingame player menu
-        this.mod.hook('S_ANSWER_INTERACTIVE', 2, () => { return !this.EnablePlayerMenu; });
+        this.mod.hook('S_ANSWER_INTERACTIVE', "raw", () => { return !this.EnablePlayerMenu; });
         // block ingame lfg list
-        this.mod.hook("S_SHOW_PARTY_MATCH_INFO", 1, () => { return !this.useLfg; });
+        this.mod.hook("S_SHOW_PARTY_MATCH_INFO", "raw", () => { return !this.useLfg; });
         // block ingame lfg details
-        this.mod.hook("S_PARTY_MEMBER_INFO", 3, () => { return !this.useLfg; });
+        this.mod.hook("S_PARTY_MEMBER_INFO", "raw", () => { return !this.useLfg; });
+        this.mod.hook("S_SHOW_CANDIDATE_LIST", "raw", () => { return !this.useLfg; });
         // block tcc messages from gpk file
         this.mod.hook('S_CHAT', 3, (p) => { return p.authorName != 'tccChatLink'; });
         // hook Command messages to display them in tcc {order: 999, filter:{fake:true}}

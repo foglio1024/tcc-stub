@@ -1,6 +1,6 @@
 {
 	"files": {
-		"index.js": "73e1819285fb141626703f097af81fbcb7d66674732ae3ea0b8a3f3d28b63505",
+		"index.js": "9dacc4bcbc67bc66e3157ee2aeca160404550f5a4cc98638aa12384fc2127cf0",
 		"lib/helpers.js": "1ea4cd6666ba67ba707cc59b9d4cb21327f40695fe224fe110295a5489d41b53",
 		"lib/rpc-handler.js": "f223de17f0b33045991c01ef12b7e68e338a1bbae97fadec7aa0a7bf39e79121",
 		"lib/rpc-server.js": "fc2c5df21b271601c3d5a81e07c67d433a90023fcd4d1da70187aa20d5d95d2b",
@@ -39,13 +39,14 @@
 		"C_SHOW_ITEM_TOOLTIP_EX": 3,
 		"C_TRADE_BROKER_REJECT_SUGGEST": 1,
 		"C_UNREGISTER_PARTY_INFO": 1,
-		"S_ANSWER_INTERACTIVE": 2,
+		"S_ANSWER_INTERACTIVE": [2,"raw"],
 		"S_CHAT": 3,
 		"S_JOIN_PRIVATE_CHANNEL": "raw",
 		"S_LOGIN": "raw",
-		"S_PARTY_MEMBER_INFO": 3,
+		"S_PARTY_MEMBER_INFO": [3,"raw"],
 		"S_PRIVATE_CHAT": 1,
-		"S_SHOW_PARTY_MATCH_INFO": 1,
+		"S_SHOW_CANDIDATE_LIST": "raw",
+		"S_SHOW_PARTY_MATCH_INFO": [1,"raw"],
 		"S_SYSTEM_MESSAGE": 1,
 		"S_USER_EFFECT": 1
 	}
