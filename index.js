@@ -186,7 +186,7 @@ class TccStub
         //     ||
         //     fs.existsSync(p); // workaround 
 
-        return this.mod.manager.isInstalled('tcc-chat-link') && this.mod.clientInterface.info.arch !== 'x64';
+        return this.mod.manager.isInstalled('tcc-chat-link');
     }
 
     memeA()
