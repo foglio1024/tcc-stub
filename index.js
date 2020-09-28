@@ -9,6 +9,8 @@ class TccStub
 {
     constructor(mod)
     {
+        mod.warn("This mod has been merged into TCC main module and can be uninstalled.");
+        return;
         this.mod = mod;
         this.useLfg = false;
         this.EnablePlayerMenu = false;
