@@ -1,4 +1,8 @@
-# tcc-stub
+# tcc-stub [deprecated]
+
+**This mod has been merged into main TCC module.**
+
+---
 
 TERA Toolbox module for TCC interaction.
 
